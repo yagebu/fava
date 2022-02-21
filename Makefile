@@ -3,7 +3,11 @@ TRANSLATION_SOURCES := $(wildcard src/fava/translations/*/LC_MESSAGES/messages.p
 TRANSLATION_TARGETS := $(TRANSLATION_SOURCES:messages.po=messages.mo)
 
 .PHONY: all
-all: src/fava/static/app.js $(TRANSLATION_TARGETS)
+all: src/fava/static/app.js $(TRANSLATION_TARGETS) .pre-commit-config.yaml
+
+.pre-commit-config.yaml: frontend/node_modules
+	cd frontend; npm run sync-pre-commit
+	touch -m .pre-commit-config.yaml
 
 src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
 	rm -f src/fava/static/*
