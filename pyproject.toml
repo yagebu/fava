@@ -59,6 +59,8 @@ fava = "fava.cli:main"
 [project.optional-dependencies]
 # Extra dependencies that are needed for the export to excel.
 excel = ["pyexcel>=0.5", "pyexcel-ods3>=0.5", "pyexcel-xlsx>=0.5"]
+# Extra dependency for uromyces support.
+uromyces = ["uromyces>=0.0.4"]
 
 [dependency-groups]
 # Stuff for the dev environment.
@@ -77,7 +79,7 @@ old-deps = ["pytest", "setuptools"]
 pre-commit = ["pre-commit>=4"]
 # Dependencies for tests.
 test = [
-  "fava[excel]",
+  "fava[excel,uromyces]",
   "pytest>=8",
   "pytest-cov>=6",
   "setuptools>=67",
@@ -115,6 +117,11 @@ constraint-dependencies = [
   "setuptools>=67",
   "six>=1.16",
 ]
+
+[tool.uv.sources]
+# Uncomment these lines to install development versions of uromyces
+# uromyces = { path = "../uromyces", editable = true }
+# uromyces = { git = "ssh://git@github.com/yagebu/uromyces" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
