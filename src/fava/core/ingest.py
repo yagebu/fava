@@ -85,6 +85,13 @@ class ImporterExtractError(ImporterMethodCallError):
     """Error calling extract for importer."""
 
 
+class DuplicateImporterNameError(FavaAPIError):
+    """Error if two importers have the same name."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__(f"Importer with name '{name}' already exists.")
+
+
 class MissingImporterConfigError(FavaAPIError):
     """Missing import-config option."""
 
@@ -361,7 +368,10 @@ def load_import_config(
             )
             raise ImportConfigLoadError(msg)
         wrapped_importer = WrappedImporter(importer)
-        importers[wrapped_importer.name] = wrapped_importer
+        name = wrapped_importer.name
+        if name in importers:
+            raise DuplicateImporterNameError(name)
+        importers[name] = wrapped_importer
     return importers, hooks
 
 

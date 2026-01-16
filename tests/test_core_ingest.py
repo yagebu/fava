@@ -11,6 +11,7 @@ from fava.beans import BEANCOUNT_V3
 from fava.beans.abc import Note
 from fava.beans.abc import Transaction
 from fava.beans.ingest import BeanImporterProtocol
+from fava.core.ingest import DuplicateImporterNameError
 from fava.core.ingest import FileImportInfo
 from fava.core.ingest import filepath_in_primary_imports_folder
 from fava.core.ingest import ImportConfigLoadError
@@ -148,6 +149,13 @@ def test_load_import_config() -> None:
 
     with pytest.raises(ImportConfigLoadError, match=r"CONFIG is missing"):
         load_import_config(Path(__file__))
+
+
+def test_load_import_config_duplicates() -> None:
+    with pytest.raises(DuplicateImporterNameError, match="duplicate"):
+        load_import_config(
+            Path(__file__).parent / "test_duplicate_importer.py"
+        )
 
 
 def test_ingest_no_config(small_example_ledger: FavaLedger) -> None:
